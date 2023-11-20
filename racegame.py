@@ -8,6 +8,16 @@ def center_lines(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
         pygame.draw.rect(screen, (255, 255, 255), (road_x + road_width // 2 - line_width // 2, y, line_width, line_gap // 1.5))
 
+def street_lines(screen, road_x, road_width, line_width, line_gap, line_y):
+    for y in range(line_y, screen.get_height(), line_gap):
+        pygame.draw.rect(screen, (255, 255, 255), (road_x + road_width // 1.35 - line_width // 2, y, line_width, line_gap // 1.5))
+
+def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
+    for y in range(line_y, screen.get_height(), line_gap):
+        pygame.draw.rect(screen, (255, 255, 255), (road_x + road_width // 4 - line_width // 2, y, line_width, line_gap // 1.5))
+
+
+
 def main():
     # Call the setup function to get the screen and other variables
     screen, SCREEN_WIDTH, SCREEN_HEIGHT, GRASS, ROAD = setup()
@@ -79,6 +89,11 @@ def main():
 
         # Draw dotted white lines down the center of the road
         center_lines(screen, road_x, road_width, line_width, line_gap, line_y)
+
+        street_lines(screen, road_x, road_width,line_width,line_gap, line_y)
+
+        street_lines2(screen, road_x, road_width, line_width, line_gap, line_y)
+
 
         # If the lines go off the screen, reset their position to create a loop
         if line_y > line_gap:
