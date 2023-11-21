@@ -4,19 +4,36 @@ from setup import setup
 from racecar import Car
 from user_ctrl import controls
 
+
+def checkered_border(screen, x, y, width, height, num_squares):
+    square_width = width / num_squares
+
+    for i in range(num_squares):
+        color = (255, 0, 0) if i % 2 == 0 else (255, 255, 255)
+        pygame.draw.rect(screen, color, (x + i * square_width, y, square_width, height))
 def center_lines(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
         pygame.draw.rect(screen, (255, 255, 255), (road_x + road_width // 2 - line_width // 2, y, line_width, line_gap // 1.5))
 
+
 def street_lines(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
-        pygame.draw.rect(screen, (255, 255, 255), (road_x + road_width // 1.35 - line_width // 2, y, line_width, line_gap // 1.5))
+        # Draw white lines in the middle of the road
+        pygame.draw.rect(screen, (255, 255, 255),
+                         (road_x + road_width // 1.35 - line_width // 2, y, line_width, line_gap // 1.5))
+
+        # Draw checkered border_lines
+        checkered_border(screen, road_x - line_width // 2, y, line_width * 3, line_gap // 1, num_squares=5)
 
 def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
-        pygame.draw.rect(screen, (255, 255, 255), (road_x + road_width // 4 - line_width // 2, y, line_width, line_gap // 1.5))
+        # Draw white lines on the sides of the road
+        pygame.draw.rect(screen, (255, 255, 255),
+                         (road_x + road_width // 4 - line_width // 2, y, line_width, line_gap // 1.5))
 
-
+        # Draw checkered border_lines
+        checkered_border(screen, road_x + road_width - line_width * 2, y, line_width * 3, line_gap // 1,
+                              num_squares=5)
 
 def main():
     # Call the setup function to get the screen and other variables
@@ -65,6 +82,7 @@ def main():
         for y in range(grass_y, SCREEN_HEIGHT, GRASS.get_height()):
             for x in range(0, SCREEN_WIDTH, GRASS.get_width()):
                 screen.blit(GRASS, (x, y))
+
 
         # If the grass scrolls off the screen, reset its position, so it loops
         if grass_y > GRASS.get_height():
