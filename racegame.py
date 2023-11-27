@@ -1,6 +1,6 @@
 import pygame
 import sys
-from setup import setup
+from setup import setup, draw_trees
 from racecar import Car
 from user_ctrl import controls
 
@@ -37,7 +37,7 @@ def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
 
 def main():
     # Call the setup function to get the screen and other variables
-    screen, SCREEN_WIDTH, SCREEN_HEIGHT, GRASS, ROAD = setup()
+    screen, SCREEN_WIDTH, SCREEN_HEIGHT, GRASS, ROAD,  = setup()
 
     # Rotate the images by 90 degrees
     GRASS = pygame.transform.rotate(GRASS, -90)
@@ -83,7 +83,6 @@ def main():
             for x in range(0, SCREEN_WIDTH, GRASS.get_width()):
                 screen.blit(GRASS, (x, y))
 
-
         # If the grass scrolls off the screen, reset its position, so it loops
         if grass_y > GRASS.get_height():
             grass_y -= num_g * GRASS.get_height()
@@ -112,16 +111,14 @@ def main():
 
         street_lines2(screen, road_x, road_width, line_width, line_gap, line_y)
 
-
-        # If the lines go off the screen, reset their position to create a loop
-        if line_y > line_gap:
-            line_y -= num_l * line_gap
-
         # Update the car,
         car.update(road_speed)
 
         # Draw the car on the screen
         car.draw(screen)
+
+        # Draw trees along the side of the road
+        draw_trees(screen, road_x, road_width)
 
         # Update the display
         pygame.display.flip()
