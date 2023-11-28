@@ -1,6 +1,6 @@
 import pygame
 import sys
-from setup import setup
+from setup import setup, setup
 from racecar import Car
 from user_ctrl import controls
 import random
@@ -29,7 +29,7 @@ def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
 
 def main():
     # Call the setup function to get the screen and other variables
-    screen, SCREEN_WIDTH, SCREEN_HEIGHT, GRASS, ROAD, snowfall = setup()
+    screen, SCREEN_WIDTH, SCREEN_HEIGHT, GRASS, ROAD, snowfall, coinfall, road_x_min, road_x_max = setup()
 
     # Rotate the images by 90 degrees
     GRASS = pygame.transform.rotate(GRASS, -90)
@@ -58,7 +58,7 @@ def main():
     # Game loop
     while True:
         # establish the road speed
-        road_speed = 0
+        road_speed = 2
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -66,6 +66,9 @@ def main():
 
         # Update the snowfall effect
         snowfall.update()
+
+        # Update the coinfall effect
+        coinfall.update()
 
         # Controls for the user car
         controls(car)
@@ -100,9 +103,10 @@ def main():
         street_lines(screen, road_x, road_width,line_width,line_gap, line_y)
         street_lines2(screen, road_x, road_width, line_width, line_gap, line_y)
 
-        car.update(road_speed)
+        car.update(road_speed, road_x_min, road_x_max)
         car.draw(screen)
         snowfall.draw(screen)
+        coinfall.draw(screen)
 
         pygame.display.flip()
         pygame.time.delay(60)

@@ -1,7 +1,6 @@
-# racecar.py
-
 import pygame
 from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
+
 
 class Car(pygame.sprite.Sprite):
     def __init__(self, screen, road_width):
@@ -22,11 +21,17 @@ class Car(pygame.sprite.Sprite):
         self.max_velocity = 200  # Maximum velocity
         self.min_velocity = 0  # Minimum velocity
 
-    def update(self, road_speed):
+    def update(self, road_speed, road_x_min, road_x_max):
         self.rect.y += self.velocity + road_speed  # Adjust the car position based on road scrolling speed
 
         # Limit the velocity to the defined range
         self.velocity = max(self.min_velocity, min(self.velocity, self.max_velocity))
+
+        # Ensure the car stays within the road boundaries
+        if self.rect.x < road_x_min:
+            self.rect.x = road_x_min
+        elif self.rect.right > road_x_max:
+            self.rect.right = road_x_max
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -39,7 +44,7 @@ class Car(pygame.sprite.Sprite):
 
     def accelerate_forward(self):
         # Adjust the acceleration value as needed
-        self.velocity += -15
+        self.velocity += -5
 
     def decelerate(self):
         # Adjust the deceleration value as needed
