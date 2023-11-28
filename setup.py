@@ -1,6 +1,41 @@
-# setup.py
-
 import pygame
+import random
+
+class Snowflake(pygame.sprite.Sprite):
+    def __init__(self, screen_width, screen_height):
+        super().__init__()
+
+        # Set the image and rect for the snowflake
+        self.image = pygame.Surface((7, 7))
+        self.image.fill((255, 255, 255))  # White color for the snowflake
+        self.rect = self.image.get_rect()
+
+        # Initialize the position and falling speed
+        self.rect.x = random.randint(0, screen_width)
+        self.rect.y = random.randint(0, screen_height)
+        self.speed = random.randint(1, 8)
+
+        # Store screen dimensions in the object
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+
+    def update(self):
+        # Move the snowflake down the screen
+        self.rect.y += self.speed
+
+        # Reset the position if the snowflake goes off the bottom of the screen
+        if self.rect.y > self.screen_height:
+            self.rect.y = 0
+            self.rect.x = random.randint(0, self.screen_width)
+
+def create_snowfall(screen_width, screen_height, num_snowflakes):
+    snowfall = pygame.sprite.Group()
+
+    for _ in range(num_snowflakes):
+        snowflake = Snowflake(screen_width, screen_height)
+        snowfall.add(snowflake)
+
+    return snowfall
 
 def setup():
     """Initialize Pygame and set up the screen."""
@@ -22,17 +57,7 @@ def setup():
     grass_rotated = pygame.transform.rotate(grass_original, -90)
     road_rotated = pygame.transform.rotate(road_original, -90)
 
-    return screen, SCREEN_WIDTH, SCREEN_HEIGHT, grass_rotated, road_rotated
-def draw_trees(screen, road_x, road_width, tree_spacing=100):
-    """Draw trees along the side of the road."""
-    tree_image = pygame.image.load('assets/christmas/PNG/tree_top.png')
+    # Create the snowfall group
+    snowfall = create_snowfall(SCREEN_WIDTH, SCREEN_HEIGHT, num_snowflakes=100)
 
-    # Set initial tree position
-    tree_x = road_x - tree_image.get_width()  # Adjust as needed
-
-    while tree_x < road_x + road_width:
-        # Draw the tree
-        screen.blit(tree_image, (tree_x, 0))  # Adjust the vertical position as needed
-
-        # Move to the next tree position
-        tree_x += tree_spacing
+    return screen, SCREEN_WIDTH, SCREEN_HEIGHT, grass_rotated, road_rotated, snowfall
