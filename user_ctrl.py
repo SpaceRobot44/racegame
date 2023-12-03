@@ -1,5 +1,5 @@
 import pygame
-from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
+from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN, K_SPACE
 
 def controls(car):
     keys = pygame.key.get_pressed()
@@ -15,3 +15,6 @@ def controls(car):
 
     if keys[K_DOWN]:
         car.decelerate()
+
+    if keys[K_SPACE]:
+        car.accelerate

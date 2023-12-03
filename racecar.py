@@ -49,4 +49,6 @@ class Car(pygame.sprite.Sprite):
     def decelerate(self):
         # Adjust the deceleration value as needed
         self.velocity -= -1
-
+    def accelerate(self):
+        # Adjust the double acceleration
+        self.velocity += -30

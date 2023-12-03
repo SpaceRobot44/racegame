@@ -37,30 +37,25 @@ def create_snowfall(screen_width, screen_height, num_snowflakes):
 
     return snowfall
 
-
-
-
-
-
 class Coin(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
         super().__init__()
 
         # Set the image and rect for the coins
-        self.image = pygame.Surface((7, 7))
+        self.image = pygame.Surface((15, 15))
         self.image.fill((255, 255, 0))  # yellow color for the coins
         self.rect = self.image.get_rect()
 
         # Initialize the position and falling speed
-        self.rect.x = random.randint(0, screen_width)
-        self.rect.y = random.randint(0, screen_height)
+        self.rect.x = random.randint(10, screen_width)
+        self.rect.y = random.randint(15, screen_height)
         self.speed = random.randint(1, 8)
 
         # Store screen dimensions in the object
         self.screen_width = screen_width
         self.screen_height = screen_height
 
-    def update_2(self):
+    def update(self):
         # Move the snowflake down the screen
         self.rect.y += self.speed
 
@@ -106,6 +101,6 @@ def setup():
     snowfall = create_snowfall(SCREEN_WIDTH, SCREEN_HEIGHT, num_snowflakes=125)
 
     # Create the coinfall group
-    coinfall = create_coinfall(SCREEN_WIDTH, SCREEN_HEIGHT, num_coins=125)
+    coinfall = create_coinfall(SCREEN_WIDTH, SCREEN_HEIGHT, num_coins=25)
 
     return screen, SCREEN_WIDTH, SCREEN_HEIGHT, grass_rotated, road_rotated, snowfall, coinfall, road_x_min, road_x_max

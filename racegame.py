@@ -1,8 +1,10 @@
 import pygame
 import sys
-from setup import setup, setup
+from setup import setup
 from racecar import Car
 from user_ctrl import controls
+from main_menu import main_menu
+from sub_menu import sub_menu
 import random
 
 def checkered_border(screen, x, y, width, height, num_squares):
@@ -55,6 +57,16 @@ def main():
     num_r = int(15)
     num_g = int(10)
 
+    font = pygame.font.Font(None, 36)
+
+    # DEFINE THE VARIABLES FOR USER INPUT
+    user_clicked_start_button = False
+    user_clicked_help_button = False
+
+    # The state which the game is in
+    game_state = "main_menu" # Initially set to main menu
+    # The function above helps identify whether the game is in the menu or actual game
+
     # Game loop
     while True:
         # establish the road speed
@@ -63,6 +75,17 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+        if game_state == "main_menu":
+            main_menu(screen, font)  # Call your main menu function
+            # Check for user input to switch game state
+            # Adjust the conditions based on your main menu buttons
+            if user_clicked_start_button:
+                game_state = "race_game"
+                elif user_clicked_help_button:
+                sub_menu(screen, font)  # Call your sub-menu function
+            elif game_state == "race_game":
+
 
         # Update the snowfall effect
         snowfall.update()
