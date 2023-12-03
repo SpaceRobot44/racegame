@@ -65,7 +65,7 @@ def main():
 
     font = pygame.font.Font(None, 36)
 
-    # DEFINE THE VARIABLES FOR USER INPUT
+    # DEFINE THE VARIABLES FOR MENU OPTIONS
     user_clicked_start_button = False
     user_clicked_help_button = False
 
@@ -97,6 +97,8 @@ def main():
                 user_clicked_help_button = True
                 game_state = "help_menu"
         elif game_state == "race_game":
+
+
             # Update the snowfall effect
             snowfall.update()
 

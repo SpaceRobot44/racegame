@@ -2,7 +2,7 @@ import pygame
 import sys
 from setup import setup
 from racecar import Car
-from user_ctrl import controls
+from user_ctrl import controls, mouse_click
 from main_menu import main_menu
 from sub_menu import sub_menu
 import random
@@ -59,10 +59,6 @@ def main():
 
     font = pygame.font.Font(None, 36)
 
-    # DEFINE THE VARIABLES FOR USER INPUT
-    user_clicked_start_button = False
-    user_clicked_help_button = False
-
     # The state which the game is in
     game_state = "main_menu" # Initially set to main menu
     # The function above helps identify whether the game is in the menu or actual game
@@ -78,61 +74,62 @@ def main():
 
         if game_state == "main_menu":
             main_menu(screen, font)  # Call your main menu function
+
             # Check for user input to switch game state
-            # Adjust the conditions based on your main menu buttons
-            if user_clicked_start_button:
+            user_clicked_start_button = mouse_click()
+
+            if user_clicked_start_button is not None:
                 game_state = "race_game"
-                elif user_clicked_help_button:
-                sub_menu(screen, font)  # Call your sub-menu function
-            elif game_state == "race_game":
 
+            user_clicked_help_button = False  # Reset help button flag
+        elif game_state == "race_game":
 
-        # Update the snowfall effect
-        snowfall.update()
+            # Update the snowfall effect
+            snowfall.update()
 
-        # Update the coinfall effect
-        coinfall.update()
+            # Update the coinfall effect
+            coinfall.update()
 
-        # Controls for the user car
-        controls(car)
+            # Controls for the user car
+            controls(car)
 
-        # Update the grass position to create an infinite scrolling effect
-        grass_y += 15 # Adjust the scrolling speed as needed
+            # Update the grass position to create an infinite scrolling effect
+            grass_y += 15 # Adjust the scrolling speed as needed
 
-        for y in range(grass_y, SCREEN_HEIGHT, GRASS.get_height()):
-            for x in range(0, SCREEN_WIDTH, GRASS.get_width()):
-                screen.blit(GRASS, (x, y))
+            for y in range(grass_y, SCREEN_HEIGHT, GRASS.get_height()):
+                for x in range(0, SCREEN_WIDTH, GRASS.get_width()):
+                    screen.blit(GRASS, (x, y))
 
-        # If the grass scrolls off the screen, reset its position, so it loops
-        if grass_y > GRASS.get_height():
-            grass_y -= num_g * GRASS.get_height()
+            # If the grass scrolls off the screen, reset its position, so it loops
+            if grass_y > GRASS.get_height():
+                grass_y -= num_g * GRASS.get_height()
 
-        # Update the road position to create an infinite scrolling effect
-        road_y += 10  # Adjust the scrolling speed as needed
+            # Update the road position to create an infinite scrolling effect
+            road_y += 10  # Adjust the scrolling speed as needed
 
-        road_x = SCREEN_WIDTH // 2 - road_width // 2
+            road_x = SCREEN_WIDTH // 2 - road_width // 2
 
-        for y in range(road_y, SCREEN_HEIGHT, ROAD.get_height()):
-            screen.blit(pygame.transform.scale(ROAD, (road_width, ROAD.get_height())), (road_x, y))
+            for y in range(road_y, SCREEN_HEIGHT, ROAD.get_height()):
+                screen.blit(pygame.transform.scale(ROAD, (road_width, ROAD.get_height())), (road_x, y))
 
-        # If the road scrolls off the screen, reset its position, so it loops
-        if road_y > ROAD.get_height():
-            road_y -= num_r * ROAD.get_height()
+            # If the road scrolls off the screen, reset its position, so it loops
+            if road_y > ROAD.get_height():
+                road_y -= num_r * ROAD.get_height()
 
-        # Update the white lines position to create an infinite scrolling effect
-        line_y += 3  # Adjust the scrolling speed as needed
+            # Update the white lines position to create an infinite scrolling effect
+            line_y += 3  # Adjust the scrolling speed as needed
 
-        center_lines(screen, road_x, road_width, line_width, line_gap, line_y)
-        street_lines(screen, road_x, road_width,line_width,line_gap, line_y)
-        street_lines2(screen, road_x, road_width, line_width, line_gap, line_y)
+            center_lines(screen, road_x, road_width, line_width, line_gap, line_y)
+            street_lines(screen, road_x, road_width,line_width,line_gap, line_y)
+            street_lines2(screen, road_x, road_width, line_width, line_gap, line_y)
 
-        car.update(road_speed, road_x_min, road_x_max)
-        car.draw(screen)
-        snowfall.draw(screen)
-        coinfall.draw(screen)
+            car.update(road_speed, road_x_min, road_x_max)
+            car.draw(screen)
+            snowfall.draw(screen)
+            coinfall.draw(screen)
 
-        pygame.display.flip()
-        pygame.time.delay(60)
+            pygame.display.flip()
+            pygame.time.delay(60)
 
 if __name__ == "__main__":
-    main()
+        main()
