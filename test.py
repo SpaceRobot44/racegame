@@ -2,11 +2,10 @@ import pygame
 import sys
 from setup import setup
 from racecar import Car
-from user_ctrl import controls
+from user_ctrl import controls, mouse_click
 from main_menu import main_menu
-from sub_menu import sub_menu
+from effects import effects
 import random
-
 
 def checkered_border(screen, x, y, width, height, num_squares):
     square_width = width / num_squares
@@ -14,12 +13,9 @@ def checkered_border(screen, x, y, width, height, num_squares):
         color = (255, 0, 0) if i % 2 == 0 else (255, 255, 255)
         pygame.draw.rect(screen, color, (x + i * square_width, y, square_width, height))
 
-
 def center_lines(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
-        pygame.draw.rect(screen, (255, 255, 255),
-                         (road_x + road_width // 2 - line_width // 2, y, line_width, line_gap // 1.5))
-
+        pygame.draw.rect(screen, (255, 255, 255), (road_x + road_width // 2 - line_width // 2, y, line_width, line_gap // 1.5))
 
 def street_lines(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
@@ -27,13 +23,11 @@ def street_lines(screen, road_x, road_width, line_width, line_gap, line_y):
                          (road_x + road_width // 1.35 - line_width // 2, y, line_width, line_gap // 1.5))
         checkered_border(screen, road_x - line_width // 2, y, line_width * 3, line_gap // 1, num_squares=5)
 
-
 def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
         pygame.draw.rect(screen, (255, 255, 255),
                          (road_x + road_width // 4 - line_width // 2, y, line_width, line_gap // 1.5))
         checkered_border(screen, road_x + road_width - line_width * 2, y, line_width * 3, line_gap // 1, num_squares=5)
-
 
 def main():
     # Call the setup function to get the screen and other variables
@@ -63,14 +57,8 @@ def main():
     num_r = int(15)
     num_g = int(10)
 
-    font = pygame.font.Font(None, 36)
-
-    # DEFINE THE VARIABLES FOR MENU OPTIONS
-    user_clicked_start_button = False
-    user_clicked_help_button = False
-
     # The state which the game is in
-    game_state = "main_menu"  # Initially set to main menu
+    game_state = "main_menu" # Initially set to main menu
     # The function above helps identify whether the game is in the menu or actual game
 
     # Game loop
@@ -83,21 +71,20 @@ def main():
                 sys.exit()
 
         if game_state == "main_menu":
-            main_menu(screen, font)  # Call your main menu function
+            font = pygame.font.Font(None, 36)  # Adjust font size and type as needed
+            main_menu(screen, font)  # Now passing the font argument
+
             # Check for user input to switch game state
-            # Adjust the conditions based on your main menu buttons
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            mouse_click = pygame.mouse.get_pressed()
+            user_clicked_start_button = mouse_click()
 
-            # Adjust these conditions based on your main menu button positions
-            if 100 <= mouse_x <= 200 and 200 <= mouse_y <= 250 and mouse_click[0] == 1:
-                user_clicked_start_button = True
+            if user_clicked_start_button is not None:
                 game_state = "race_game"
-            elif 100 <= mouse_x <= 200 and 300 <= mouse_y <= 350 and mouse_click[0] == 1:
-                user_clicked_help_button = True
-                game_state = "help_menu"
-        elif game_state == "race_game":
 
+            user_clicked_help_button = False  # Reset help button flag
+
+        elif game_state == "race_game":
+            # Controls for the user car
+            controls(car)
 
             # Update the snowfall effect
             snowfall.update()
@@ -105,11 +92,8 @@ def main():
             # Update the coinfall effect
             coinfall.update()
 
-            # Controls for the user car
-            controls(car)
-
             # Update the grass position to create an infinite scrolling effect
-            grass_y += 15  # Adjust the scrolling speed as needed
+            grass_y += 15 # Adjust the scrolling speed as needed
 
             for y in range(grass_y, SCREEN_HEIGHT, GRASS.get_height()):
                 for x in range(0, SCREEN_WIDTH, GRASS.get_width()):
@@ -135,7 +119,7 @@ def main():
             line_y += 3  # Adjust the scrolling speed as needed
 
             center_lines(screen, road_x, road_width, line_width, line_gap, line_y)
-            street_lines(screen, road_x, road_width, line_width, line_gap, line_y)
+            street_lines(screen, road_x, road_width,line_width,line_gap, line_y)
             street_lines2(screen, road_x, road_width, line_width, line_gap, line_y)
 
             car.update(road_speed, road_x_min, road_x_max)
@@ -143,9 +127,9 @@ def main():
             snowfall.draw(screen)
             coinfall.draw(screen)
 
-        pygame.display.flip()
-        pygame.time.delay(60)
 
+            pygame.display.flip()
+            pygame.time.delay(60)
 
 if __name__ == "__main__":
     main()

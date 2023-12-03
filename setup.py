@@ -37,32 +37,45 @@ def create_snowfall(screen_width, screen_height, num_snowflakes):
 
     return snowfall
 
+
 class Coin(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
         super().__init__()
 
-        # Set the image and rect for the coins
         self.image = pygame.Surface((15, 15))
-        self.image.fill((255, 255, 0))  # yellow color for the coins
-        self.rect = self.image.get_rect()
+        self.image.fill((255, 255, 0))
 
-        # Initialize the position and falling speed
-        self.rect.x = random.randint(10, screen_width)
-        self.rect.y = random.randint(15, screen_height)
+        self.rect = self.image.get_rect()
         self.speed = random.randint(1, 8)
 
-        # Store screen dimensions in the object
         self.screen_width = screen_width
         self.screen_height = screen_height
 
+        # INITIALLY SETS THE POSITION OF THE COINS ON THE ROAD
+        middle_width = screen_width / 2
+        lower_x = middle_width - 150
+        upper_x = middle_width + 150
+        self.rect.x = random.randint(lower_x, upper_x)
+
+        # Set initial y position
+        self.rect.y = 0
+
     def update(self):
-        # Move the snowflake down the screen
         self.rect.y += self.speed
 
-        # Reset the position if the coin goes off the bottom of the screen
         if self.rect.y > self.screen_height:
-            self.rect.y = 0
-            self.rect.x = random.randint(0, self.screen_width)
+            self.reset()
+
+    def reset(self): # THIS RESETS THE POSITION OF THE COINS ON THE SCREEN
+        self.rect.x = random.randint(self.screen_width / 2 - 150,
+                                     self.screen_width / 2 + 150)
+        self.rect.y = 0
+        self.speed = random.randint(1, 8)
+
+        # Scatter x position more for the coins on the road
+        x_pos = random.randint(self.screen_width / 2 , self.screen_width / 2)
+        x_offset = random.randint(-150, 150) # THIS KEEPS THE COINS WITHIN THE BOUNDARIES BUT RANDO
+        self.rect.x = x_pos + x_offset
 
 def create_coinfall(screen_width, screen_height, num_coins):
     coinfall = pygame.sprite.Group()

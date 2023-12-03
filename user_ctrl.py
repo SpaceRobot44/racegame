@@ -1,31 +1,33 @@
+
 import pygame
-from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN, K_SPACE
+from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
+import racecar
 import sys
 
 def controls(car):
     keys = pygame.key.get_pressed()
 
-    if keys[K_LEFT]:
+    if keys[pygame.K_LEFT]:
         car.move_left()
 
-    if keys[K_RIGHT]:
+    if keys[pygame.K_RIGHT]:
         car.move_right()
 
-    if keys[K_UP]:
-        car.accelerate_forward()
+    if keys[pygame.K_UP]:
+        car.accelerate()
 
-    if keys[K_DOWN]:
+    if keys[pygame.K_DOWN]:
         car.decelerate()
 
-    if keys[K_SPACE]:
-        car.accelerate
 
 def mouse_click():
+    print("Checking for mouse clicks...")
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            print("Mouse click detected!")
             mouse_x, mouse_y = event.pos
 
             # Define the coordinates for the start button
@@ -33,6 +35,7 @@ def mouse_click():
 
             # Check if the mouse click is within the start button
             if start_button_rect.collidepoint(mouse_x, mouse_y):
+                print("Mouse click within the start button!")
                 return True  # User clicked the start button
 
     return False  # No relevant click detected

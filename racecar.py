@@ -1,7 +1,6 @@
 import pygame
 from pygame.locals import K_LEFT, K_RIGHT, K_UP, K_DOWN
 
-
 class Car(pygame.sprite.Sprite):
     def __init__(self, screen, road_width):
         super().__init__()
@@ -21,17 +20,29 @@ class Car(pygame.sprite.Sprite):
         self.max_velocity = 200  # Maximum velocity
         self.min_velocity = 0  # Minimum velocity
 
+        self.acceleration = 5  # Adjust the acceleration value as needed
+        self.deceleration = 1  # Adjust the deceleration value as needed
+
     def update(self, road_speed, road_x_min, road_x_max):
-        self.rect.y += self.velocity + road_speed  # Adjust the car position based on road scrolling speed
+        keys = pygame.key.get_pressed()
 
-        # Limit the velocity to the defined range
-        self.velocity = max(self.min_velocity, min(self.velocity, self.max_velocity))
+        # Check if any arrow keys are pressed
+        if any(keys):
+            # Adjust the car position based on road scrolling speed and positive velocity
+            self.rect.y += max(0, self.velocity + road_speed)
 
-        # Ensure the car stays within the road boundaries
-        if self.rect.x < road_x_min:
-            self.rect.x = road_x_min
-        elif self.rect.right > road_x_max:
-            self.rect.right = road_x_max
+            # Limit the velocity to the defined range
+            self.velocity = max(self.min_velocity, min(self.velocity, self.max_velocity))
+
+            # Ensure the car stays within the road boundaries
+            if self.rect.x < road_x_min:
+                self.rect.x = road_x_min
+                self.velocity = 0  # Stop the car if it hits the left boundary
+            elif self.rect.right > road_x_max:
+                self.rect.right = road_x_max
+                self.velocity = 0  # Stop the car if it hits the right boundary
+            else:
+                self.velocity = 0
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -42,13 +53,11 @@ class Car(pygame.sprite.Sprite):
     def move_right(self):
         self.rect.x += 25  # Adjust the rightward movement speed
 
-    def accelerate_forward(self):
-        # Adjust the acceleration value as needed
-        self.velocity += -5
+    def accelerate(self):
+        # Speed for moving the car forward
+        self.rect.y -= 5
 
     def decelerate(self):
-        # Adjust the deceleration value as needed
-        self.velocity -= -1
-    def accelerate(self):
-        # Adjust the double acceleration
-        self.velocity += -30
+        # Speed for moving the car backward
+        self.rect.y += 5
+

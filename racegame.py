@@ -4,7 +4,7 @@ from setup import setup
 from racecar import Car
 from user_ctrl import controls, mouse_click
 from main_menu import main_menu
-from sub_menu import sub_menu
+from effects import effects
 import random
 
 def checkered_border(screen, x, y, width, height, num_squares):
@@ -57,8 +57,6 @@ def main():
     num_r = int(15)
     num_g = int(10)
 
-    font = pygame.font.Font(None, 36)
-
     # The state which the game is in
     game_state = "main_menu" # Initially set to main menu
     # The function above helps identify whether the game is in the menu or actual game
@@ -73,7 +71,8 @@ def main():
                 sys.exit()
 
         if game_state == "main_menu":
-            main_menu(screen, font)  # Call your main menu function
+            font = pygame.font.Font(None, 36)  # Adjust font size and type as needed
+            main_menu(screen, font)  # Now passing the font argument
 
             # Check for user input to switch game state
             user_clicked_start_button = mouse_click()
@@ -82,6 +81,7 @@ def main():
                 game_state = "race_game"
 
             user_clicked_help_button = False  # Reset help button flag
+
         elif game_state == "race_game":
 
             # Update the snowfall effect
@@ -128,8 +128,11 @@ def main():
             snowfall.draw(screen)
             coinfall.draw(screen)
 
+            # Display score and speed
+            effects(screen, car.get_score(), car.get_speed(), pygame.font.Font(None, 36))
+
             pygame.display.flip()
             pygame.time.delay(60)
 
 if __name__ == "__main__":
-        main()
+    main()
