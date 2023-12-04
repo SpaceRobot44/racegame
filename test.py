@@ -1,11 +1,14 @@
 import pygame
 import sys
-from setup import setup
+from setup import setup, coinfall
 from racecar import Car
 from user_ctrl import controls, mouse_click
 from main_menu import main_menu
 from effects import effects
 import random
+from sounds import play_music, stop_music
+import os
+
 
 def checkered_border(screen, x, y, width, height, num_squares):
     square_width = width / num_squares
@@ -28,6 +31,13 @@ def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
         pygame.draw.rect(screen, (255, 255, 255),
                          (road_x + road_width // 4 - line_width // 2, y, line_width, line_gap // 1.5))
         checkered_border(screen, road_x + road_width - line_width * 2, y, line_width * 3, line_gap // 1, num_squares=5)
+def display_score(screen, font, score):
+    # Render the score and speed text
+    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+
+    # Blit the text onto the screen
+    screen.blit(score_text, (10, 10))  # Adjust the position as needed
+
 
 def main():
     # Call the setup function to get the screen and other variables
@@ -60,6 +70,16 @@ def main():
     # The state which the game is in
     game_state = "main_menu" # Initially set to main menu
     # The function above helps identify whether the game is in the menu or actual game
+
+    # Set the path to your music file
+    music_path = os.path.join('assets/christmas/Music/music 1.mp3')
+    # Play music with looping
+    play_music(music_path, loop=True)
+
+    # Define a font for displaying score and speed
+    font = pygame.font.Font(None, 36)  # Adjust font size and type as needed
+
+    score = [0]
 
     # Game loop
     while True:
@@ -127,9 +147,19 @@ def main():
             snowfall.draw(screen)
             coinfall.draw(screen)
 
+            result = pygame.sprite.spritecollide(car,coinfall, True) # COINFALL IS WHERE MY COIN CLASS IS LOCATED IN
+            if result:
+                scores = len(result) # IF TRUE, THE CAR AND COINS WILL COLLIDE NOW
+
+            # Draw the score and speed on the screen
+            display_score(screen, font, score)
+
 
             pygame.display.flip()
             pygame.time.delay(60)
+
+    # Stop the music when the game exits
+    stop_music()
 
 if __name__ == "__main__":
     main()

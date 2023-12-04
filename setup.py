@@ -70,7 +70,7 @@ class Coin(pygame.sprite.Sprite):
         self.rect.x = random.randint(self.screen_width / 2 - 150,
                                      self.screen_width / 2 + 150)
         self.rect.y = 0
-        self.speed = random.randint(1, 8)
+        self.speed = random.randint(2, 8)
 
         # Scatter x position more for the coins on the road
         x_pos = random.randint(self.screen_width / 2 , self.screen_width / 2)
@@ -78,13 +78,13 @@ class Coin(pygame.sprite.Sprite):
         self.rect.x = x_pos + x_offset
 
 def create_coinfall(screen_width, screen_height, num_coins):
-    coinfall = pygame.sprite.Group()
-
     for _ in range(num_coins):
-        coin = Coin(screen_width, screen_height)
+        coin = Coin(screen_width, screen_height) # COMBINES THE DIMENSIONS FROM THE ABOVE COIN CLASS
         coinfall.add(coin)
 
     return coinfall
+
+coinfall = pygame.sprite.Group() # ESTABLISH COINFALL AS A GROUP
 
 def setup():
     """Initialize Pygame and set up the screen."""

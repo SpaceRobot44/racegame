@@ -54,10 +54,10 @@ class Car(pygame.sprite.Sprite):
         self.rect.x += 25  # Adjust the rightward movement speed
 
     def accelerate(self):
-        # Speed for moving the car forward
+        # Move the car forward
         self.rect.y -= 5
 
     def decelerate(self):
-        # Speed for moving the car backward
+        # Move the car backward
         self.rect.y += 5
 
