@@ -48,10 +48,10 @@ class Car(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
 
     def move_left(self):
-        self.rect.x -= 10  # Adjust the leftward movement speed
+        self.rect.x -= 8  # Adjust the leftward movement speed
 
     def move_right(self):
-        self.rect.x += 10  # Adjust the rightward movement speed
+        self.rect.x += 8  # Adjust the rightward movement speed
 
     def accelerate(self):
         # Move the car forward

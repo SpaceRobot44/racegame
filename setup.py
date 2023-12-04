@@ -135,7 +135,7 @@ def setup():
             lower_x = middle_width - 175
             upper_x = middle_width + 175
             self.rect.x = random.randint(lower_x, upper_x)
-            self.rect.y = 0
+            self.rect.y = 5 # INITIAL POSITION FOR WHERE THE COINS GENERATE WHEN THEY LOOP
 
         # THE COINS WILL RESET TO THEIR INITIAL POSITION ONCE THEY REACH THE BOTTOM
         def update(self):
