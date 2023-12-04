@@ -37,7 +37,6 @@ def create_snowfall(screen_width, screen_height, num_snowflakes):
 
     return snowfall
 
-
 class Coin(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
         super().__init__()
@@ -51,31 +50,34 @@ class Coin(pygame.sprite.Sprite):
         self.screen_width = screen_width
         self.screen_height = screen_height
 
-        # INITIALLY SETS THE POSITION OF THE COINS ON THE ROAD
-        middle_width = screen_width / 2
+        self.set_initial_position()
+
+    def set_initial_position(self):
+        middle_width = self.screen_width / 2
         lower_x = middle_width - 150
         upper_x = middle_width + 150
         self.rect.x = random.randint(lower_x, upper_x)
-
-        # Set initial y position
         self.rect.y = 0
 
     def update(self):
         self.rect.y += self.speed
-
+    # THE COINS WILL MAINTAIN A FAST LOOPING SPEED AFTER REACHING THE MINIMUM SPEED, CAUSING A RANDOM LOOP
         if self.rect.y > self.screen_height:
             self.reset()
+            self.speed -= 0 # THE SPEED AT WHICH THE COINS COME ON THE SCREEN AFTER REACHING THE BOTTOM
+            if self.speed < 8: # MINIMUM VALUE FOR THE SPEED
+                self.speed = random.randint(8, 12) # RANDOM RANGE OF VALUES THAT THE COINS CAN LOOP FROM
 
-    def reset(self): # THIS RESETS THE POSITION OF THE COINS ON THE SCREEN
-        self.rect.x = random.randint(self.screen_width / 2 - 150,
-                                     self.screen_width / 2 + 150)
-        self.rect.y = 0
-        self.speed = random.randint(2, 8)
+    def reset(self):
+        self.set_initial_position()
+        self.speed = random.randint(8, 12)
+        self.scatter_x_position()
 
-        # Scatter x position more for the coins on the road
-        x_pos = random.randint(self.screen_width / 2 , self.screen_width / 2)
-        x_offset = random.randint(-150, 150) # THIS KEEPS THE COINS WITHIN THE BOUNDARIES BUT RANDO
+    def scatter_x_position(self):
+        x_pos = random.randint(self.screen_width / 2, self.screen_width / 2)
+        x_offset = random.randint(-150, 150)
         self.rect.x = x_pos + x_offset
+
 
 def create_coinfall(screen_width, screen_height, num_coins):
     for _ in range(num_coins):
@@ -113,7 +115,57 @@ def setup():
     # Create the snowfall group
     snowfall = create_snowfall(SCREEN_WIDTH, SCREEN_HEIGHT, num_snowflakes=125)
 
+    class Coin(pygame.sprite.Sprite):
+        def __init__(self, screen_width, screen_height):
+            super().__init__()
+
+            self.image = pygame.Surface((15, 15))
+            self.image.fill((255, 255, 0))
+
+            self.rect = self.image.get_rect()
+            self.speed = random.randint(1, 8)
+
+            self.screen_width = screen_width
+            self.screen_height = screen_height
+
+            self.set_initial_position()
+
+        def set_initial_position(self): # INITIAL POSITION OF THE COINS BOUNDS
+            middle_width = self.screen_width / 2
+            lower_x = middle_width - 175
+            upper_x = middle_width + 175
+            self.rect.x = random.randint(lower_x, upper_x)
+            self.rect.y = 0
+
+        # THE COINS WILL RESET TO THEIR INITIAL POSITION ONCE THEY REACH THE BOTTOM
+        def update(self):
+            self.rect.y += self.speed
+            if self.rect.y > self.screen_height:
+                self.reset()
+                self.speed -= 1
+                if self.speed < 8:
+                    self.speed = random.randint(8, 12) # RANDOM RANGE SPEED AT WHICH THE COINS COME ON THE SCREEN
+
+        def reset(self):
+            self.set_initial_position()
+            self.speed = random.randint(8, 12)
+            self.scatter_x_position()
+
+        def scatter_x_position(self):
+            x_pos = random.randint(self.screen_width / 2, self.screen_width / 2) # RANDOM X VALUES THE COINS GO TO
+            # WITHIN THE PAREMETERS OF THE SCREEN I SET
+            x_offset = random.randint(-150, 150)
+            self.rect.x = x_pos + x_offset
+
+    def create_coinfall(screen_width, screen_height, num_coins):
+        coinfall = pygame.sprite.Group()  # Create a sprite group to hold the coins
+        for _ in range(num_coins):
+            coin = Coin(screen_width, screen_height)
+            coinfall.add(coin)
+
+        return coinfall
+
     # Create the coinfall group
-    coinfall = create_coinfall(SCREEN_WIDTH, SCREEN_HEIGHT, num_coins=25)
+    coinfall = create_coinfall(SCREEN_WIDTH, SCREEN_HEIGHT, num_coins=60) # NUMBER OF COINS ON THE SCREEN AT A TIME
 
     return screen, SCREEN_WIDTH, SCREEN_HEIGHT, grass_rotated, road_rotated, snowfall, coinfall, road_x_min, road_x_max

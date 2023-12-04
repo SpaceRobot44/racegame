@@ -13,8 +13,9 @@ def main_menu(screen, font):
 
     # Create a bright red box for the button
     button_width = 450
-    button_height = 50
+    button_height = 75
 
+    # THIS IS ALSO WHY I USE A DIFFERENT CODE FOR THE START BUTTON
     # Center the button horizontally
     button_x = (screen.get_width() - button_width) // 2
 
@@ -26,13 +27,18 @@ def main_menu(screen, font):
     # Define the title text and style
     title_text = "JINGLE BELL RACEWAY"
     title_font_size = 60  # Adjust the font size
-    title_font = pygame.font.Font(None, title_font_size)
+    title_font = pygame.font.Font('assets/Extras/ka1.ttf', title_font_size)
     title_render = title_font.render(title_text, True, title_color)
     title_rect = title_render.get_rect()
 
     # Center the title at the top of the screen
     title_rect.centerx = screen.get_width() // 2
     title_rect.y = 50  # Adjust the vertical position as needed
+
+    font_size = 30  # ESTABLISH THE FONT SIZE
+    # Load the font file
+    font_path = 'assets/Extras/ka1.ttf'
+    font = pygame.font.Font(font_path, font_size)
 
     start_button_text = font.render("Click Here To Start", True, text_color)
 

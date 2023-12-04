@@ -31,12 +31,24 @@ def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
         pygame.draw.rect(screen, (255, 255, 255),
                          (road_x + road_width // 4 - line_width // 2, y, line_width, line_gap // 1.5))
         checkered_border(screen, road_x + road_width - line_width * 2, y, line_width * 3, line_gap // 1, num_squares=5)
+
+
 def display_score(screen, font, score):
-    # Render the score and speed text
+    # Define the font path and size
+    font_path = 'assets/Extras/ka1.ttf'
+    font_size = 24
+
+    # Load the font
+    font = pygame.font.Font(font_path, font_size)
+
+    # Create a text surface with the score and font
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
 
+    # Set the position of the text
+    text_position = (10, 10)
+
     # Blit the text onto the screen
-    screen.blit(score_text, (10, 10))  # Adjust the position as needed
+    screen.blit(score_text, text_position)
 
 
 def main():
@@ -58,9 +70,9 @@ def main():
     line_gap = 30
 
     # Initial starting positions for grass, road, and lines scrolling
-    grass_y = -10000
-    road_y = -10000
-    line_y = -10000
+    grass_y = -50000
+    road_y = -50000
+    line_y = -50000
 
     # Allows me to place any number I want into my loop function below because it's established
     num_l = int(15)
@@ -76,15 +88,14 @@ def main():
     # Play music with looping
     play_music(music_path, loop=True)
 
-    # Define a font for displaying score and speed
-    font = pygame.font.Font(None, 36)  # Adjust font size and type as needed
+    score = 0
 
-    score = [0]
 
     # Game loop
     while True:
-        # establish the road speed
+        # Establish the road speed
         road_speed = 2
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -113,7 +124,7 @@ def main():
             coinfall.update()
 
             # Update the grass position to create an infinite scrolling effect
-            grass_y += 15 # Adjust the scrolling speed as needed
+            grass_y += 10  # Adjust the scrolling speed as needed
 
             for y in range(grass_y, SCREEN_HEIGHT, GRASS.get_height()):
                 for x in range(0, SCREEN_WIDTH, GRASS.get_width()):
@@ -139,7 +150,7 @@ def main():
             line_y += 3  # Adjust the scrolling speed as needed
 
             center_lines(screen, road_x, road_width, line_width, line_gap, line_y)
-            street_lines(screen, road_x, road_width,line_width,line_gap, line_y)
+            street_lines(screen, road_x, road_width, line_width, line_gap, line_y)
             street_lines2(screen, road_x, road_width, line_width, line_gap, line_y)
 
             car.update(road_speed, road_x_min, road_x_max)
@@ -147,13 +158,13 @@ def main():
             snowfall.draw(screen)
             coinfall.draw(screen)
 
-            result = pygame.sprite.spritecollide(car,coinfall, True) # COINFALL IS WHERE MY COIN CLASS IS LOCATED IN
+            # Check for collisions between car and coinfall sprites
+            result = pygame.sprite.spritecollide(car, coinfall, True)  # COINFALL is where my Coin class is located
             if result:
-                scores = len(result) # IF TRUE, THE CAR AND COINS WILL COLLIDE NOW
+                score += len(result)  # If true, the car and coins will collide now
 
             # Draw the score and speed on the screen
             display_score(screen, font, score)
-
 
             pygame.display.flip()
             pygame.time.delay(60)
