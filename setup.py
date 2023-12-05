@@ -10,6 +10,7 @@ class Snowflake(pygame.sprite.Sprite):
         self.image.fill((255, 255, 255))  # White color for the snowflake
         self.rect = self.image.get_rect()
 
+        # .RECT DEFINES THE POSITION AND SIZE OF SPRITES
         # Initialize the position and falling speed
         self.rect.x = random.randint(0, screen_width)
         self.rect.y = random.randint(0, screen_height)
@@ -122,9 +123,10 @@ def setup():
             self.image = pygame.Surface((15, 15))
             self.image.fill((255, 255, 0))
 
-            self.rect = self.image.get_rect()
+            self.rect = self.image.get_rect() # RETURNS A RECTANGLE WITHIN THE SAME DIMENSIONS AS OUR SURFACE
             self.speed = random.randint(1, 8)
 
+            # STORE THE SIZE VALUES IN VARIABLES
             self.screen_width = screen_width
             self.screen_height = screen_height
 
@@ -152,16 +154,16 @@ def setup():
             self.scatter_x_position()
 
         def scatter_x_position(self):
-            x_pos = random.randint(self.screen_width / 2, self.screen_width / 2) # RANDOM X VALUES THE COINS GO TO
-            # WITHIN THE PAREMETERS OF THE SCREEN I SET
+            # RANDOM X VALUES THE COINS GO TO WITHIN THE PARAMETERS OF THE SCREEN I SET
+            x_pos = random.randint(self.screen_width / 2, self.screen_width / 2)
             x_offset = random.randint(-150, 150)
             self.rect.x = x_pos + x_offset
 
     def create_coinfall(screen_width, screen_height, num_coins):
         coinfall = pygame.sprite.Group()  # Create a sprite group to hold the coins
-        for _ in range(num_coins):
+        for _ in range(num_coins): # CREATES A DESIRED NUMBER OF COINS WANTED
             coin = Coin(screen_width, screen_height)
-            coinfall.add(coin)
+            coinfall.add(coin) # ADDS COINS TO GROUP
 
         return coinfall
 

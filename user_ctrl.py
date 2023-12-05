@@ -22,13 +22,13 @@ def controls(car):
 
 def mouse_click():
     print("Checking for mouse clicks...")
-    for event in pygame.event.get():
+    for event in pygame.event.get(): # CHECKING FOR MOUSE CLICKS
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            print("Mouse click detected!")
-            mouse_x, mouse_y = event.pos
+            print("Mouse click detected!") # HELPS INDICATE THAT A MOUSE CLICK HAS BEEN DETECTED
+            mouse_x, mouse_y = event.pos # RETRIEVES THE X AND Y POSITIONS OF THE MOUSE WHEN IT WAS CLICKED
 
             # Define the coordinates for the start button
             start_button_rect = pygame.Rect(100, 200, 100, 50)

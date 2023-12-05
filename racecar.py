@@ -24,7 +24,7 @@ class Car(pygame.sprite.Sprite):
         self.deceleration = 1  # Adjust the deceleration value as needed
 
     def update(self, road_speed, road_x_min, road_x_max):
-        keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed() # CALLS ALL THE KEYS TO BE USED
 
         # Check if any arrow keys are pressed
         if any(keys):
@@ -44,6 +44,7 @@ class Car(pygame.sprite.Sprite):
             else:
                 self.velocity = 0
 
+    # DRAW FUNCTION ALLOWS THINGS THAT ARE PASSED TO SHOW UP ON THE SCREEN
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 

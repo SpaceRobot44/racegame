@@ -54,7 +54,7 @@ def main_menu(screen, font):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if the mouse click is within the button
-                if button_rect.collidepoint(event.pos):
+                if button_rect.collidepoint(event.pos): # IF CLICKED WITHIN AREA, THE GAME WILL START
                     return  # Return to start the game
 
         # Draw the background image

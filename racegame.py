@@ -12,6 +12,7 @@ import os
 
 def checkered_border(screen, x, y, width, height, num_squares):
     square_width = width / num_squares
+    #  Determines the color of each square based on whether the index i is even or odd.
     for i in range(num_squares):
         color = (255, 0, 0) if i % 2 == 0 else (255, 255, 255)
         pygame.draw.rect(screen, color, (x + i * square_width, y, square_width, height))
@@ -29,6 +30,7 @@ def street_lines(screen, road_x, road_width, line_width, line_gap, line_y):
 def street_lines2(screen, road_x, road_width, line_width, line_gap, line_y):
     for y in range(line_y, screen.get_height(), line_gap):
         pygame.draw.rect(screen, (255, 255, 255),
+                         # ALLOWS FOR THE CHANGE IN POSITION FOR THE DOTTED LINES OVER THE SCREEN
                          (road_x + road_width // 4 - line_width // 2, y, line_width, line_gap // 1.5))
         checkered_border(screen, road_x + road_width - line_width * 2, y, line_width * 3, line_gap // 1, num_squares=5)
 
@@ -96,12 +98,13 @@ def main():
         # Establish the road speed
         road_speed = 2
 
+        # CHECKS FOR EVENTS WITHIN THE GAME
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-        if game_state == "main_menu":
+        if game_state == "main_menu": # IF TRUE, THE MAIN MENU IS DISPLAYED
             font = pygame.font.Font(None, 36)  # Adjust font size and type as needed
             main_menu(screen, font)  # Now passing the font argument
 
@@ -113,6 +116,8 @@ def main():
 
             user_clicked_help_button = False  # Reset help button flag
 
+            # UPDATES THE CONTROLS ON THE SCREEN
+            # ALSO LINKED TO OTHER MODULES
         elif game_state == "race_game":
             # Controls for the user car
             controls(car)
@@ -139,6 +144,7 @@ def main():
 
             road_x = SCREEN_WIDTH // 2 - road_width // 2
 
+            # BLITS DIFFERENT Y COORDINATES WHEN SCROLLING TO CREATE THE EFFECT
             for y in range(road_y, SCREEN_HEIGHT, ROAD.get_height()):
                 screen.blit(pygame.transform.scale(ROAD, (road_width, ROAD.get_height())), (road_x, y))
 
@@ -161,7 +167,7 @@ def main():
             # Check for collisions between car and coinfall sprites
             result = pygame.sprite.spritecollide(car, coinfall, True)  # COINFALL is where my Coin class is located
             if result:
-                score += len(result)  # If true, the car and coins will collide now
+                score += len(result)  # IF A COLLISION OCCURS, THE COINS ARE REMOVED AND THE SCORE IS UPDATED
 
             # Draw the score and speed on the screen
             display_score(screen, font, score)
